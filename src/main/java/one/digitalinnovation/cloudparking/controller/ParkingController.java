@@ -21,11 +21,13 @@ public class ParkingController {
 
     public ParkingController(ParkingService parkingService) {
         this.parkingService = parkingService;
+        this.parkingMapper = new ParkingMapper();
     }
 
     @GetMapping
     public List<ParkingDTO> findAll() {
         List<Parking> parkingList = parkingService.findAll();
         List<ParkingDTO> result = parkingMapper.toParkingDTO(parkingList);
+        return result;
     }
 }

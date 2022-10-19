@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class ParkingMapper {
@@ -17,6 +18,6 @@ public class ParkingMapper {
     }
 
     public List<ParkingDTO> toParkingDTO(List<Parking> parkingList) {
-        return parkingList.stream().map(parking -> new ParkingDTO(parking.getId(), parking.getLicensePlate(), parking.getState(), parking.getModel(), parking.getColor())).collect(Collectors.toList());
+        return parkingList.stream().map(this::toParkingDTO).collect(Collectors.toList());
     }
 }
