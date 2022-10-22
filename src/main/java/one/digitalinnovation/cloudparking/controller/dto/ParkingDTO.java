@@ -1,5 +1,6 @@
 package one.digitalinnovation.cloudparking.controller.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -9,7 +10,9 @@ public class ParkingDTO {
     private String state;
     private String model;
     private String color;
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private String entryDate;
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private String exitDate;
     private Double bill;
 
