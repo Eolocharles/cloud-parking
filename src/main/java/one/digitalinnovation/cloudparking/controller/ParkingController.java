@@ -8,6 +8,7 @@ import one.digitalinnovation.cloudparking.model.Parking;
 import one.digitalinnovation.cloudparking.service.ParkingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class ParkingController {
         this.parkingMapper = new ParkingMapper();
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @GetMapping
 
     public ResponseEntity< List<ParkingDTO>> findAll() {
@@ -31,6 +33,7 @@ public class ParkingController {
         return ResponseEntity.ok(result);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @GetMapping("/{id}")
     public ResponseEntity<ParkingDTO> findById(@PathVariable String id) {
         Parking parking = parkingService.findById(id);
@@ -38,12 +41,14 @@ public class ParkingController {
         return ResponseEntity.ok(result);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable String id) {
         parkingService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<ParkingDTO> create(@RequestBody ParkingCreateDTO parkingDTO) {
         Parking parking = parkingMapper.toParkingCreate(parkingDTO);
@@ -52,6 +57,7 @@ public class ParkingController {
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<ParkingDTO> update(@PathVariable String id, @RequestBody ParkingCreateDTO parkingDTO) {
         Parking parking = parkingMapper.toParkingCreate(parkingDTO);
@@ -61,6 +67,7 @@ public class ParkingController {
         return ResponseEntity.ok(result);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/{id}/checkout")
     public ResponseEntity<ParkingDTO> checkout(@PathVariable String id) {
         Parking parking = parkingService.checkout(id);
