@@ -5,6 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -15,13 +16,10 @@ public class Role  implements GrantedAuthority, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID roleId;
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, unique = true)
-    private RoleName roleName;
 
-    @Override
-    public String getAuthority() {
-        return this.roleName.toString();
+    private String roleName;
+
+    public Role() {
     }
 
     public UUID getRoleId() {
@@ -32,11 +30,28 @@ public class Role  implements GrantedAuthority, Serializable {
         this.roleId = roleId;
     }
 
-    public RoleName getRoleName() {
+    public String getRoleName() {
         return roleName;
     }
 
-    public void setRoleName(RoleName roleName) {
+    public void setRoleName(String roleName) {
         this.roleName = roleName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Role role)) return false;
+        return Objects.equals(roleId, role.roleId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(roleId);
+    }
+
+    @Override
+    public String getAuthority() {
+        return this.roleName;
     }
 }
