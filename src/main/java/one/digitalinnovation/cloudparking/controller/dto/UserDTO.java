@@ -3,6 +3,9 @@ package one.digitalinnovation.cloudparking.controller.dto;
 import one.digitalinnovation.cloudparking.model.Role;
 import one.digitalinnovation.cloudparking.model.User;
 
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,7 +14,9 @@ import java.util.UUID;
 public class UserDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     private UUID id;
+    @NotBlank(message = "Campo requerido")
     private String name;
+    @Email(message = "Email inválido")
     private String email;
 
     Set<RoleDTO> roles = new HashSet<>();

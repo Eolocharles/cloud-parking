@@ -2,6 +2,7 @@ package one.digitalinnovation.cloudparking.service;
 
 import one.digitalinnovation.cloudparking.controller.dto.RoleDTO;
 import one.digitalinnovation.cloudparking.controller.dto.UserDTO;
+import one.digitalinnovation.cloudparking.controller.dto.UserInsertDTO;
 import one.digitalinnovation.cloudparking.model.Role;
 import one.digitalinnovation.cloudparking.model.User;
 import one.digitalinnovation.cloudparking.repository.RoleRepository;
@@ -9,6 +10,7 @@ import one.digitalinnovation.cloudparking.repository.UserRepository;
 import one.digitalinnovation.cloudparking.service.exceptions.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,9 +23,12 @@ public class UserService {
 
     private final RoleRepository roleRepository;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
+    private final PasswordEncoder passwordEncoder;
+
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -43,9 +48,10 @@ public class UserService {
     }
 
     @Transactional
-    public UserDTO insert(UserDTO dto) {
+    public UserDTO insert(UserInsertDTO dto) {
         User entity = new User();
         copyDtoToEntity(dto, entity);
+        entity.setPassword(passwordEncoder.encode(dto.getPassword()));
         entity = userRepository.save(entity);
         return new UserDTO(entity);
     }
@@ -53,7 +59,7 @@ public class UserService {
     @Transactional
     public UserDTO update(UUID id, UserDTO dto) {
         try {
-            User entity = userRepository.getOne(id);
+            User entity = userRepository.getReferenceById(id);
             copyDtoToEntity(dto, entity);
             entity = userRepository.save(entity);
             return new UserDTO(entity);

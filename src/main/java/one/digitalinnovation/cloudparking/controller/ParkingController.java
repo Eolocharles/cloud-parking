@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -50,7 +52,7 @@ public class ParkingController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
-    public ResponseEntity<ParkingDTO> create(@RequestBody ParkingCreateDTO parkingDTO) {
+    public ResponseEntity<ParkingDTO> create(@Valid @RequestBody ParkingCreateDTO parkingDTO) {
         Parking parking = parkingMapper.toParkingCreate(parkingDTO);
         parking = parkingService.create(parking);
         ParkingDTO result = parkingMapper.toParkingDTO(parking);
@@ -59,7 +61,7 @@ public class ParkingController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<ParkingDTO> update(@PathVariable String id, @RequestBody ParkingCreateDTO parkingDTO) {
+    public ResponseEntity<ParkingDTO> update(@PathVariable String id, @Valid @RequestBody ParkingCreateDTO parkingDTO) {
         Parking parking = parkingMapper.toParkingCreate(parkingDTO);
         parking.setId(id);
         parking = parkingService.update(id,parking);
