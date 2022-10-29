@@ -1,6 +1,12 @@
 package one.digitalinnovation.cloudparking.controller.dto;
 
+import one.digitalinnovation.cloudparking.service.validation.UserInsertValid;
+
+import java.io.Serial;
+
+@UserInsertValid
 public class UserInsertDTO extends UserDTO {
+    @Serial
     private static final long serialVersionUID = 1L;
     private String password;
 
